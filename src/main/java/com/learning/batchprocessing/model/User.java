@@ -1,4 +1,4 @@
-package com.learning.batchprocessing;
+package com.learning.batchprocessing.model;
 
 import lombok.*;
 

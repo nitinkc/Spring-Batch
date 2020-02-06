@@ -1,5 +1,6 @@
 package com.learning.batchprocessing;
 
+import com.learning.batchprocessing.model.User;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -9,6 +10,8 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.LineMapper;
+import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
@@ -56,6 +59,29 @@ public class BatchConfiguration {
             }
         });
         return reader;
+
+        /*return new FlatFileItemReaderBuilder<User>()
+                .resource(new ClassPathResource("file.csv"))
+                .lineMapper(lineMapper())
+                //.fieldSetMapper()
+                //.names(names)
+                .build();*/
+    }
+
+    @Bean
+    public LineMapper<User> lineMapper(){
+        final DefaultLineMapper<User> defaultLineMapper = new DefaultLineMapper<>();
+        final DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
+        final BeanWrapperFieldSetMapper<User> field = new BeanWrapperFieldSetMapper<User>();
+        lineTokenizer.setDelimiter(",");
+        lineTokenizer.setStrict(false);
+        //lineTokenizer.setNames(names);
+
+        field.setTargetType(User.class);
+        defaultLineMapper.setLineTokenizer(lineTokenizer);
+        defaultLineMapper.setFieldSetMapper(field);
+
+        return defaultLineMapper;
     }
 
     @Bean
@@ -87,7 +113,7 @@ public class BatchConfiguration {
     public Step step1() {
         return stepBuilderFactory
                 .get("step1")
-                .<User, User>chunk(10)
+                .<User, User>chunk(1)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
