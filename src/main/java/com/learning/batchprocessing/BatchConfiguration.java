@@ -14,6 +14,7 @@ import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
@@ -25,6 +26,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableBatchProcessing
+@ComponentScan(basePackages = "webApp")
 public class BatchConfiguration {
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -72,12 +74,23 @@ public class BatchConfiguration {
 
     @Bean
     public Job importUserJob(JobCompletionNotificationListener listener) {
-        return jobBuilderFactory.get("importUserJob").incrementer(
-                new RunIdIncrementer()).listener(listener).flow(step1()).end().build();
+        return jobBuilderFactory
+                .get("importUserJob")
+                .incrementer(new RunIdIncrementer())
+                .listener(listener)
+                .flow(step1())
+                .end()
+                .build();
     }
 
     @Bean
     public Step step1() {
-        return stepBuilderFactory.get("step1").<User, User>chunk(10).reader(reader()).processor(processor()).writer(writer()).build();
+        return stepBuilderFactory
+                .get("step1")
+                .<User, User>chunk(10)
+                .reader(reader())
+                .processor(processor())
+                .writer(writer())
+                .build();
     }
 }
