@@ -41,7 +41,6 @@ public class JobConfiguration {
     }
 
     //Add the step into a job
-
     @Bean
     public Job helloWorldJob(){
         return jobBuilderFactory.get("helloWorldJob")
