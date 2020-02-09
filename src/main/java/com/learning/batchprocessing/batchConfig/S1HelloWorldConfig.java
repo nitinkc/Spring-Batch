@@ -39,12 +39,10 @@ public class S1HelloWorldConfig {
     }
 
     //Add the step into a job
-
     @Bean
     public Job helloWorldJob(){
         return jobBuilderFactory.get("helloWorldJob")
                 .start(step100())
                 .build();
     }
-
 }
