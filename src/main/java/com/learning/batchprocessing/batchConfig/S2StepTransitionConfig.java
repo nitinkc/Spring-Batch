@@ -66,4 +66,14 @@ public class S2StepTransitionConfig {
                 .next(step2())
                 .build();
     }
+
+    @Bean
+    public Job transitionJobUsingOn(){
+        return jobBuilderFactory.get("transitionJobOn")
+                .start(step1())
+                .on("COMPLETED").to(step3())
+                .from(step2()).on("COMPLETED").to(step3())
+                .from(step3()).end()
+                .build();
+    }
 }
