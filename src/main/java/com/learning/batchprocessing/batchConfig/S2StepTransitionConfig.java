@@ -60,6 +60,7 @@ public class S2StepTransitionConfig {
     //Build a job using the three steps
     @Bean
     public Job transitionJobUsingNext(){
+        System.out.println("#################transitionJobUsingNext#######################");
         return jobBuilderFactory.get("transitionJobNext")
                 .start(step1())
                 .next(step3())
@@ -69,10 +70,21 @@ public class S2StepTransitionConfig {
 
     @Bean
     public Job transitionJobUsingOn(){
+        System.out.println("#################transitionJobUsingOn#######################");
         return jobBuilderFactory.get("transitionJobOn")
                 .start(step1())
                 .on("COMPLETED").to(step3())
                 .from(step2()).on("COMPLETED").to(step3())
+                .from(step3()).end()
+                .build();
+    }
+
+    @Bean
+    public Job transitionJobSimpleNext() {
+        return jobBuilderFactory.get("transitionJobNext")
+                .start(step1())
+                .on("COMPLETED").to(step2())
+                .from(step2()).on("COMPLETED").stopAndRestart(step3())
                 .from(step3()).end()
                 .build();
     }
