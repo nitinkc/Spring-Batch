@@ -27,8 +27,8 @@ public class S2StepTransitionConfig {
     private StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Step step1(){
-        return stepBuilderFactory.get("step1")
+    public Step step_1(){
+        return stepBuilderFactory.get("step#1")
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
@@ -40,8 +40,8 @@ public class S2StepTransitionConfig {
 
     // Implemented using Lambda
     @Bean
-    public Step step2(){
-        return stepBuilderFactory.get("step1")
+    public Step step_2(){
+        return stepBuilderFactory.get("step#2")
                 .tasklet((stepContribution, chunkContext) -> {
                     System.out.println("#### STEP 2 ####");
                     return RepeatStatus.FINISHED;
@@ -49,8 +49,8 @@ public class S2StepTransitionConfig {
     }
 
     @Bean
-    public Step step3(){
-        return stepBuilderFactory.get("step3")
+    public Step step_3(){
+        return stepBuilderFactory.get("step#3")
                 .tasklet((stepContribution, chunkContext) -> {
                     System.out.println("#### STEP 3 ####");
                     return RepeatStatus.FINISHED;
@@ -62,9 +62,9 @@ public class S2StepTransitionConfig {
     public Job transitionJobUsingNext(){
         System.out.println("#################transitionJobUsingNext#######################");
         return jobBuilderFactory.get("transitionJobNext")
-                .start(step1())
-                .next(step3())
-                .next(step2())
+                .start(step_1())
+                .next(step_3())
+                .next(step_2())
                 .build();
     }
 
@@ -72,10 +72,10 @@ public class S2StepTransitionConfig {
     public Job transitionJobUsingOn(){
         System.out.println("#################transitionJobUsingOn#######################");
         return jobBuilderFactory.get("transitionJobOn")
-                .start(step1())
-                .on("COMPLETED").to(step3())
-                .from(step2()).on("COMPLETED").to(step3())
-                .from(step3()).end()
+                .start(step_1())
+                .on("COMPLETED").to(step_3())
+                .from(step_2()).on("COMPLETED").to(step_3())
+                .from(step_3()).end()
                 .build();
     }
 
