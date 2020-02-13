@@ -27,12 +27,12 @@ public class S1HelloWorldConfig {
     private StepBuilderFactory stepBuilderFactory;
 
     @Bean
-    public Step step100(){
-        return stepBuilderFactory.get("step1")
+    public Step step1HelloWorldConfig(){
+        return stepBuilderFactory.get("step1HelloWorldConfig")
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
-                        System.out.println("Hello World!");
+                        System.out.println("Hello World! from  step1HelloWorldConfig");
                         return RepeatStatus.FINISHED;
                     }
                 }).build();
@@ -42,7 +42,7 @@ public class S1HelloWorldConfig {
     @Bean
     public Job helloWorldJob(){
         return jobBuilderFactory.get("helloWorldJob")
-                .start(step100())
+                .start(step1HelloWorldConfig())
                 .build();
     }
 }

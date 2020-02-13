@@ -79,13 +79,13 @@ public class S2StepTransitionConfig {
                 .build();
     }
 
-    /*@Bean
+    @Bean
     public Job transitionJobSimpleNext() {
         return jobBuilderFactory.get("transitionJobNext")
-                .start(step1())
-                .on("COMPLETED").to(step2())
-                .from(step2()).on("COMPLETED").stopAndRestart(step3())
-                .from(step3()).end()
+                .start(step_1())
+                .on("COMPLETED").to(step_2())
+                .from(step_2()).on("COMPLETED").stopAndRestart(step_3())
+                .from(step_3()).end()
                 .build();
-    }*/
+    }
 }
